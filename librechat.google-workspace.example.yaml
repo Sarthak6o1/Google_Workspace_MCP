@@ -26,11 +26,37 @@ mcpServers:
       GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID}"
       GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET}"
       GOOGLE_MCP_REDIRECT_URI: "http://localhost:8080/"
-    timeout: 60000
+    timeout: 60000  # MCP server timeout in ms; increase if tools take longer
 
-# Optional: OpenRouter (uses OPENROUTER_KEY from .env). Remove if using Gemini only.
+# --- LLM Endpoints ---
+# Built-in (openAI, anthropic, google): set env vars in .env, no YAML needed.
+# Azure OpenAI: requires YAML config below (groups with instanceName, deploymentName).
+# Custom (OpenRouter, Groq, etc.): uncomment entries below.
+# See: https://docs.librechat.ai/configuration/librechat_yaml/ai_endpoints
+
 endpoints:
+  # --- Azure OpenAI (uncomment and configure if using Azure) ---
+  # azureOpenAI:
+  #   titleModel: gpt-4o
+  #   groups:
+  #     - group: "my-azure-resource"
+  #       apiKey: "${AZURE_OPENAI_API_KEY}"
+  #       instanceName: "your-resource-name"
+  #       deploymentName: gpt-4o
+  #       version: "2024-02-15-preview"
+  #       models:
+  #         gpt-4o: true
+  #     # Add more groups for other deployments, or use models with per-model deploymentName
+
+  # --- Optional: Built-in overrides (only if you need custom models/titleModel) ---
+  # openAI:
+  #   titleModel: gpt-4o-mini
+  # anthropic:
+  #   titleModel: claude-3-5-haiku
+  # google:
+  #   titleModel: gemini-2.0-flash-lite
   custom:
+    # OpenRouter (many models: Llama, Mistral, etc.) - uses OPENROUTER_KEY
     - name: 'OpenRouter'
       apiKey: '${OPENROUTER_KEY}'
       baseURL: 'https://openrouter.ai/api/v1'
@@ -45,3 +71,176 @@ endpoints:
       dropParams:
         - 'stop'
       modelDisplayLabel: 'OpenRouter'
+
+    # Groq - uses GROQ_API_KEY
+    # - name: 'Groq'
+    #   apiKey: '${GROQ_API_KEY}'
+    #   baseURL: 'https://api.groq.com/openai/v1/'
+    #   models:
+    #     default:
+    #       - 'llama3-70b-8192'
+    #       - 'llama3-8b-8192'
+    #     fetch: false
+    #   titleConvo: true
+    #   titleModel: 'llama3-70b-8192'
+    #   modelDisplayLabel: 'Groq'
+
+    # Mistral - uses MISTRAL_API_KEY
+    # - name: 'Mistral'
+    #   apiKey: '${MISTRAL_API_KEY}'
+    #   baseURL: 'https://api.mistral.ai/v1'
+    #   models:
+    #     default:
+    #       - 'mistral-large-latest'
+    #       - 'mistral-small-latest'
+    #     fetch: true
+    #   titleConvo: true
+    #   titleModel: 'mistral-small-latest'
+    #   modelDisplayLabel: 'Mistral'
+
+    # Together AI - uses TOGETHERAI_API_KEY
+    # - name: 'Together'
+    #   apiKey: '${TOGETHERAI_API_KEY}'
+    #   baseURL: 'https://api.together.xyz/v1'
+    #   models:
+    #     default:
+    #       - 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo'
+    #     fetch: true
+    #   titleConvo: true
+    #   titleModel: 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo'
+    #   modelDisplayLabel: 'Together'
+
+    # Perplexity - uses PERPLEXITY_API_KEY
+    # - name: 'Perplexity'
+    #   apiKey: '${PERPLEXITY_API_KEY}'
+    #   baseURL: 'https://api.perplexity.ai'
+    #   models:
+    #     default:
+    #       - 'llama-3.1-sonar-large-128k-online'
+    #     fetch: false
+    #   titleConvo: true
+    #   titleModel: 'llama-3.1-sonar-large-128k-online'
+    #   modelDisplayLabel: 'Perplexity'
+
+    # DeepSeek - uses DEEPSEEK_API_KEY
+    # - name: 'DeepSeek'
+    #   apiKey: '${DEEPSEEK_API_KEY}'
+    #   baseURL: 'https://api.deepseek.com/v1'
+    #   models:
+    #     default:
+    #       - 'deepseek-chat'
+    #       - 'deepseek-coder'
+    #     fetch: true
+    #   titleConvo: true
+    #   titleModel: 'deepseek-chat'
+    #   modelDisplayLabel: 'DeepSeek'
+
+    # xAI (Grok) - uses XAI_API_KEY
+    # - name: 'xAI'
+    #   apiKey: '${XAI_API_KEY}'
+    #   baseURL: 'https://api.x.ai/v1'
+    #   models:
+    #     default:
+    #       - 'grok-2'
+    #       - 'grok-2-mini'
+    #     fetch: true
+    #   titleConvo: true
+    #   titleModel: 'grok-2-mini'
+    #   modelDisplayLabel: 'xAI'
+
+    # Cohere - uses COHERE_API_KEY
+    # - name: 'Cohere'
+    #   apiKey: '${COHERE_API_KEY}'
+    #   baseURL: 'https://api.cohere.ai/v1'
+    #   models:
+    #     default:
+    #       - 'command-r'
+    #       - 'command-r-plus'
+    #       - 'command-light'
+    #     fetch: false
+    #   titleConvo: true
+    #   titleModel: 'command-light'
+    #   modelDisplayLabel: 'Cohere'
+
+    # Hugging Face - uses HUGGINGFACE_TOKEN
+    # - name: 'HuggingFace'
+    #   apiKey: '${HUGGINGFACE_TOKEN}'
+    #   baseURL: 'https://api-inference.huggingface.co/v1/'
+    #   models:
+    #     default:
+    #       - 'meta-llama/Llama-3.1-8B-Instruct'
+    #       - 'mistralai/Mistral-7B-Instruct-v0.3'
+    #     fetch: false
+    #   titleConvo: true
+    #   titleModel: 'meta-llama/Llama-3.1-8B-Instruct'
+    #   modelDisplayLabel: 'Hugging Face'
+
+    # Fireworks AI - uses FIREWORKS_API_KEY
+    # - name: 'Fireworks'
+    #   apiKey: '${FIREWORKS_API_KEY}'
+    #   baseURL: 'https://api.fireworks.ai/inference/v1'
+    #   models:
+    #     default:
+    #       - 'accounts/fireworks/models/llama-v3p1-70b-instruct'
+    #     fetch: true
+    #   titleConvo: true
+    #   titleModel: 'accounts/fireworks/models/llama-v3p1-70b-instruct'
+    #   modelDisplayLabel: 'Fireworks'
+
+    # AnyScale - uses ANYSCALE_API_KEY
+    # - name: 'AnyScale'
+    #   apiKey: '${ANYSCALE_API_KEY}'
+    #   baseURL: 'https://api.endpoints.anyscale.com/v1'
+    #   models:
+    #     default:
+    #       - 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo'
+    #     fetch: true
+    #   titleConvo: true
+    #   titleModel: 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo'
+    #   modelDisplayLabel: 'AnyScale'
+
+    # ShuttleAI - uses SHUTTLEAI_API_KEY
+    # - name: 'ShuttleAI'
+    #   apiKey: '${SHUTTLEAI_API_KEY}'
+    #   baseURL: 'https://api.shuttleai.app/v1'
+    #   models:
+    #     default:
+    #       - 'shuttle-2.0'
+    #     fetch: true
+    #   titleConvo: true
+    #   titleModel: 'shuttle-2.0'
+    #   modelDisplayLabel: 'ShuttleAI'
+
+    # Unify - uses UNIFY_API_KEY
+    # - name: 'Unify'
+    #   apiKey: '${UNIFY_API_KEY}'
+    #   baseURL: 'https://api.unify.ai/v1'
+    #   models:
+    #     default:
+    #       - 'meta-llama/llama-3.1-70b-instruct'
+    #     fetch: true
+    #   titleConvo: true
+    #   titleModel: 'meta-llama/llama-3.1-70b-instruct'
+    #   modelDisplayLabel: 'Unify'
+
+    # Helicone (gateway) - uses HELICONE_KEY
+    # - name: 'Helicone'
+    #   apiKey: '${HELICONE_KEY}'
+    #   baseURL: 'https://ai-gateway.helicone.ai'
+    #   headers:
+    #     x-librechat-body-parentmessageid: '{{LIBRECHAT_BODY_PARENTMESSAGEID}}'
+    #   models:
+    #     default:
+    #       - 'gpt-4o-mini'
+    #       - 'claude-3-5-sonnet'
+    #     fetch: true
+    #   titleConvo: true
+    #   titleModel: 'gpt-4o-mini'
+    #   modelDisplayLabel: 'Helicone'
+
+# Built-in (env vars in .env):
+# - openAI: OPENAI_API_KEY
+# - anthropic: ANTHROPIC_API_KEY
+# - google: GOOGLE_KEY or GEMINI_API_KEY
+# - azureOpenAI: endpoints.azureOpenAI in librechat.yaml (see YAML above)
+# - bedrock: BEDROCK_AWS_ACCESS_KEY_ID + SECRET + REGION

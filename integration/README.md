@@ -97,6 +97,13 @@ Upstream uses `onClick` for the toggle. If the OAuth popup is blocked by the bro
 
 ---
 
+## Why Two Redirect URIs?
+
+- **`http://localhost:8080/`**: Used by the MCP OAuth flow. The Python script runs a local server on port 8080 to receive the callback from Google.
+- **`http://localhost:3080/oauth/google/callback`**: Used by LibreChat's built-in Google login (social login). If you use LibreChat's "Sign in with Google", both are needed.
+
+---
+
 ## Troubleshooting
 
 | Issue | Fix |
@@ -104,3 +111,4 @@ Upstream uses `onClick` for the toggle. If the OAuth popup is blocked by the bro
 | `spawn is not defined` | Add `const { spawn } = require('child_process');` at top of `api/server/index.js` |
 | OAuth window doesn't open | Check browser popup blocker; ensure patch is in `toggleServerSelection` |
 | `python: command not found` | OAuth route uses `python3` on Linux/Mac, `python` on Windows. For YAML, use `command: python3` (or `python` on Windows) |
+| Port 8080 conflict | Ensure no other service uses 8080; OAuth callback needs it |
